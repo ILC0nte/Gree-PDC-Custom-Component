@@ -1,0 +1,11 @@
+{
+    "domain": "gree_pdc",
+    "name": "Gree PDC",
+    "documentation": "https://github.com/cbernoni",
+    "requirements": [
+        "cryptography"
+    ],
+    "version": "1.0.0",
+    "config_flow": true,
+    "iot_class": "local_polling"
+}

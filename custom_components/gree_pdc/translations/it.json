@@ -1,0 +1,131 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Configura Gree PDC",
+                "description": "Inserisci l'indirizzo IP della tua Pompa di Calore Gree.",
+                "data": {
+                    "host": "Indirizzo IP"
+                }
+            },
+            "select": {
+                "title": "Seleziona Dispositivo",
+                "description": "Sono stati trovati più dispositivi. Selezionane uno.",
+                "data": {
+                    "device": "Dispositivo"
+                }
+            },
+            "name": {
+                "title": "Nome Dispositivo",
+                "description": "Specifica un nome per questo dispositivo. Verrà utilizzato come prefisso per tutte le entità.",
+                "data": {
+                    "name": "Nome",
+                    "scan_interval": "Intervallo di aggiornamento (secondi)"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "Impossibile connettersi al dispositivo",
+            "invalid_auth": "Chiave o ID non validi",
+            "unknown": "Errore imprevisto"
+        },
+        "abort": {
+            "already_configured": "Il dispositivo è già configurato"
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Opzioni Gree PDC",
+                "data": {
+                    "scan_interval": "Intervallo di aggiornamento (secondi)"
+                }
+            }
+        }
+    },
+    "entity": {
+        "sensor": {
+            "pdc_in_water_temp": {
+                "name": "PDC Temp Ritorno"
+            },
+            "pdc_out_water_temp": {
+                "name": "PDC Temp Mandata"
+            },
+            "pdc_temp_dhw": {
+                "name": "PDC Temp ACS"
+            },
+            "pdc_room_temp": {
+                "name": "PDC Temp Ambiente"
+            },
+            "pdc_operation_mode": {
+                "state": {
+                    "heating": "Riscaldamento",
+                    "acs": "ACS",
+                    "cooling_acs": "Raffrescamento + ACS",
+                    "heating_acs": "Riscaldamento + ACS",
+                    "cooling": "Raffrescamento"
+                }
+            }
+        },
+        "binary_sensor": {
+            "pdc_power": {
+                "name": "PDC Accesa"
+            },
+            "pdc_quiet_mode": {
+                "name": "PDC Modalità Silenziosa"
+            },
+            "boiler_heat_resistance": {
+                "name": "Resistenza Elettrica Boiler"
+            },
+            "pdc_rapid_dhw": {
+                "name": "PDC ACS Rapida"
+            },
+            "heating_state": {
+                "name": "Stato Riscaldamento"
+            },
+            "cooling_state": {
+                "name": "Stato Raffrescamento"
+            },
+            "dhw_state": {
+                "name": "Stato ACS"
+            }
+        },
+        "switch": {
+            "pdc_power_switch": {
+                "name": "PDC Interruttore Accensione"
+            },
+            "pdc_quiet_mode_switch": {
+                "name": "PDC Interruttore Silenzioso"
+            }
+        },
+        "number": {
+            "pdc_setpoint_dhw": {
+                "name": "PDC Setpoint ACS"
+            },
+            "pdc_setpoint_heating_out_temp": {
+                "name": "PDC Setpoint Mandata Risc"
+            },
+            "pdc_setpoint_cooling_out_temp": {
+                "name": "PDC Setpoint Mandata Raff"
+            },
+            "pdc_setpoint_heating_room_temp": {
+                "name": "PDC Setpoint Ambiente Risc"
+            },
+            "pdc_setpoint_cooling_room_temp": {
+                "name": "PDC Setpoint Ambiente Cond"
+            }
+        },
+        "select": {
+            "pdc_operation_mode": {
+                "name": "PDC Modalità Operativa",
+                "state": {
+                    "heating": "Riscaldamento",
+                    "acs": "ACS",
+                    "cooling_acs": "Raffrescamento + ACS",
+                    "heating_acs": "Riscaldamento + ACS",
+                    "cooling": "Raffrescamento"
+                }
+            }
+        }
+    }
+}

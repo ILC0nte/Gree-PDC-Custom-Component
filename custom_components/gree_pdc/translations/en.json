@@ -1,0 +1,131 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Configure Gree PDC",
+                "description": "Enter the IP address of your Gree PDC device.",
+                "data": {
+                    "host": "IP Address"
+                }
+            },
+            "select": {
+                "title": "Select Device",
+                "description": "Multiple devices found. Please select one.",
+                "data": {
+                    "device": "Device"
+                }
+            },
+            "name": {
+                "title": "Device Name",
+                "description": "Specify a name for this device. This will be used as a prefix for all entities.",
+                "data": {
+                    "name": "Name",
+                    "scan_interval": "Polling Interval (seconds)"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "Failed to connect to the device",
+            "invalid_auth": "Invalid encryption key or ID",
+            "unknown": "Unexpected error"
+        },
+        "abort": {
+            "already_configured": "Device is already configured"
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Gree PDC Options",
+                "data": {
+                    "scan_interval": "Polling Interval (seconds)"
+                }
+            }
+        }
+    },
+    "entity": {
+        "sensor": {
+            "pdc_in_water_temp": {
+                "name": "PDC In Water Temp"
+            },
+            "pdc_out_water_temp": {
+                "name": "PDC Out Water Temp"
+            },
+            "pdc_temp_dhw": {
+                "name": "PDC Temp DHW"
+            },
+            "pdc_room_temp": {
+                "name": "PDC Room Temp"
+            },
+            "pdc_operation_mode": {
+                "state": {
+                    "heating": "Heating",
+                    "acs": "DHW",
+                    "cooling_acs": "Cooling + DHW",
+                    "heating_acs": "Heating + DHW",
+                    "cooling": "Cooling"
+                }
+            }
+        },
+        "binary_sensor": {
+            "pdc_power": {
+                "name": "PDC Power"
+            },
+            "pdc_quiet_mode": {
+                "name": "PDC Quiet Mode"
+            },
+            "boiler_heat_resistance": {
+                "name": "Boiler Heat Resistance"
+            },
+            "pdc_rapid_dhw": {
+                "name": "PDC Rapid DHW"
+            },
+            "heating_state": {
+                "name": "Heating State"
+            },
+            "cooling_state": {
+                "name": "Cooling State"
+            },
+            "dhw_state": {
+                "name": "DHW State"
+            }
+        },
+        "switch": {
+            "pdc_power_switch": {
+                "name": "PDC Power Switch"
+            },
+            "pdc_quiet_mode_switch": {
+                "name": "PDC Quiet Mode Switch"
+            }
+        },
+        "number": {
+            "pdc_setpoint_dhw": {
+                "name": "PDC Setpoint DHW"
+            },
+            "pdc_setpoint_heating_out_temp": {
+                "name": "PDC Setpoint Heating Out Temp"
+            },
+            "pdc_setpoint_cooling_out_temp": {
+                "name": "PDC Setpoint Cooling Out Temp"
+            },
+            "pdc_setpoint_heating_room_temp": {
+                "name": "PDC Setpoint Heating Room Temp"
+            },
+            "pdc_setpoint_cooling_room_temp": {
+                "name": "PDC Setpoint Cooling Room Temp"
+            }
+        },
+        "select": {
+            "pdc_operation_mode": {
+                "name": "PDC Operation Mode",
+                "state": {
+                    "heating": "Heating",
+                    "acs": "DHW",
+                    "cooling_acs": "Cooling + DHW",
+                    "heating_acs": "Heating + DHW",
+                    "cooling": "Cooling"
+                }
+            }
+        }
+    }
+}
