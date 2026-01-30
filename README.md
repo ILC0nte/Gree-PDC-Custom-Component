@@ -39,5 +39,13 @@ The component generates a prefixed set of entities (example for a device named "
 - `sensor.gree_out_water_temp`: Current flow temperature.
 - `number.gree_setpoint_dhw`: DHW target temperature.
 
+
 ## Credits
-Based on the original reverse engineering of the Gree UDP protocol.
+This project is based on the work of several contributors and projects:
+
+gree-remote - Gree air conditioner remote control protocol
+Home Assistant Developer Documentation - Official development guidelines and best practices
+
+* [gree-remote](https://github.com/tomikaa87/gree-remote) - Gree air conditioner remote control protocol.
+* [Home Assistant Developer Documentation](https://developers.home-assistant.io/) - Official development guidelines and best practices
+* [Google Antigravity Ide](https://https://antigravity.google/)
