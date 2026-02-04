@@ -39,6 +39,11 @@ The component generates a prefixed set of entities (example for a device named "
 - `sensor.gree_out_water_temp`: Current flow temperature.
 - `number.gree_setpoint_dhw`: DHW target temperature.
 
+## Tested Devices 
+Component where tested and confirmed to work for:
+- Aermec HMI series (my own heat pump!)
+- Hokkaido Ondo series
+- Rhoss Thaity series
 
 ## Credits
 This project is based on the work of several contributors and projects:
