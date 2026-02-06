@@ -54,8 +54,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
     client = hass.data[DOMAIN][entry.entry_id]["client"]
     
     entities = [
-        GreePDCGenericSwitch(coordinator, client, entry, "Power Switch", "Pow", "pdc_power_switch", "mdi:power"),
-        GreePDCGenericSwitch(coordinator, client, entry, "Quiet Mode Switch", "Quiet", "pdc_quiet_mode_switch", "mdi:volume-mute"),
+        GreePDCGenericSwitch(coordinator, client, entry, "Power Switch", "Pow", "power_switch", "mdi:power"),
+        GreePDCGenericSwitch(coordinator, client, entry, "Quiet Mode Switch", "Quiet", "quiet_mode_switch", "mdi:volume-mute"),
     ]
     
     async_add_entities(entities)

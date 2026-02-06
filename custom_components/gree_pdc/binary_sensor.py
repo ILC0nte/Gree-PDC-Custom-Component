@@ -41,10 +41,10 @@ async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
     
     entities = [
-        GreePDCBinarySensor(coordinator, entry, "Power", "Pow", "pdc_power", BinarySensorDeviceClass.POWER),
-        GreePDCBinarySensor(coordinator, entry, "Quiet Mode", "Quiet", "pdc_quiet_mode"),
+        GreePDCBinarySensor(coordinator, entry, "Power", "Pow", "power", BinarySensorDeviceClass.POWER),
+        GreePDCBinarySensor(coordinator, entry, "Quiet Mode", "Quiet", "quiet_mode"),
         GreePDCBinarySensor(coordinator, entry, "Boiler Heat Resistance", "WatBoxElcHeRunSta", "boiler_heat_resistance"),
-        GreePDCBinarySensor(coordinator, entry, "Rapid DHW", "FastHtWter", "pdc_rapid_dhw"),
+        GreePDCBinarySensor(coordinator, entry, "Rapid DHW", "FastHtWter", "rapid_dhw"),
         
         # Function status based on Mod
         GreePDCBinarySensor(coordinator, entry, "Heating State", "Mod", "heating_state", 

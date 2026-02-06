@@ -45,19 +45,19 @@
     },
     "entity": {
         "sensor": {
-            "pdc_in_water_temp": {
-                "name": "PDC In Water Temp"
+            "in_water_temp": {
+                "name": "In Water Temp"
             },
-            "pdc_out_water_temp": {
-                "name": "PDC Out Water Temp"
+            "out_water_temp": {
+                "name": "Out Water Temp"
             },
-            "pdc_temp_dhw": {
-                "name": "PDC Temp DHW"
+            "temp_dhw": {
+                "name": "Temp DHW"
             },
-            "pdc_room_temp": {
-                "name": "PDC Room Temp"
+            "room_temp": {
+                "name": "Room Temp"
             },
-            "pdc_operation_mode": {
+            "operation_mode": {
                 "state": {
                     "heating": "Heating",
                     "acs": "ACS",
@@ -68,17 +68,17 @@
             }
         },
         "binary_sensor": {
-            "pdc_power": {
-                "name": "PDC Power"
+            "power": {
+                "name": "Power"
             },
-            "pdc_quiet_mode": {
-                "name": "PDC Quiet Mode"
+            "quiet_mode": {
+                "name": "Quiet Mode"
             },
             "boiler_heat_resistance": {
                 "name": "Boiler Heat Resistance"
             },
-            "pdc_rapid_dhw": {
-                "name": "PDC Rapid DHW"
+            "rapid_dhw": {
+                "name": "Rapid DHW"
             },
             "heating_state": {
                 "name": "Heating State"
@@ -91,33 +91,33 @@
             }
         },
         "switch": {
-            "pdc_power_switch": {
-                "name": "PDC Power Switch"
+            "power_switch": {
+                "name": "Power Switch"
             },
-            "pdc_quiet_mode_switch": {
-                "name": "PDC Quiet Mode Switch"
+            "quiet_mode_switch": {
+                "name": "Quiet Mode Switch"
             }
         },
         "number": {
-            "pdc_setpoint_dhw": {
-                "name": "PDC Setpoint DHW"
+            "setpoint_dhw": {
+                "name": "Setpoint DHW"
             },
-            "pdc_setpoint_heating_out_temp": {
-                "name": "PDC Setpoint Heating Out Temp"
+            "setpoint_heating_out_temp": {
+                "name": "Setpoint Heating Out Temp"
             },
-            "pdc_setpoint_cooling_out_temp": {
-                "name": "PDC Setpoint Cooling Out Temp"
+            "setpoint_cooling_out_temp": {
+                "name": "Setpoint Cooling Out Temp"
             },
-            "pdc_setpoint_heating_room_temp": {
-                "name": "PDC Setpoint Heating Room Temp"
+            "setpoint_heating_room_temp": {
+                "name": "Setpoint Heating Room Temp"
             },
-            "pdc_setpoint_cooling_room_temp": {
-                "name": "PDC Setpoint Cooling Room Temp"
+            "setpoint_cooling_room_temp": {
+                "name": "Setpoint Cooling Room Temp"
             }
         },
         "select": {
-            "pdc_operation_mode": {
-                "name": "PDC Operation Mode",
+            "operation_mode": {
+                "name": "Operation Mode",
                 "state": {
                     "heating": "Heating",
                     "acs": "ACS",

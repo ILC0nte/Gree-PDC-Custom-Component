@@ -17,7 +17,7 @@ MODE_ID_TO_KEY = {
 MODE_KEY_TO_ID = {v: k for k, v in MODE_ID_TO_KEY.items()}
 
 class GreePDCModeSelect(CoordinatorEntity, SelectEntity):
-    _attr_translation_key = "pdc_operation_mode"
+    _attr_translation_key = "operation_mode"
 
     def __init__(self, coordinator, client, entry):
         super().__init__(coordinator)
@@ -25,7 +25,7 @@ class GreePDCModeSelect(CoordinatorEntity, SelectEntity):
         self._entry_id = entry.entry_id
         device_name = entry.data.get(CONF_NAME, "Gree PDC")
         self._attr_name = f"{device_name} Operation Mode"
-        self._attr_unique_id = f"{entry.entry_id}_pdc_operation_mode"
+        self._attr_unique_id = f"{entry.entry_id}_operation_mode"
         self._attr_options = list(MODE_ID_TO_KEY.values())
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
@@ -34,7 +34,7 @@ class GreePDCModeSelect(CoordinatorEntity, SelectEntity):
             model="Versati",
         )
         # Set the entity_id to match the requested schema
-        self.entity_id = f"select.{device_name.lower().replace(' ', '_')}_pdc_operation_mode"
+        self.entity_id = f"select.{device_name.lower().replace(' ', '_')}_operation_mode"
 
     @property
     def current_option(self):

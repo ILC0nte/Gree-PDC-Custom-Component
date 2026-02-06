@@ -48,11 +48,11 @@ async def async_setup_entry(hass, entry, async_add_entities):
     client = hass.data[DOMAIN][entry.entry_id]["client"]
     
     entities = [
-        GreePDCNumber(coordinator, client, entry, "Setpoint DHW", "WatBoxTemSet", "pdc_setpoint_dhw", 30, 60),
-        GreePDCNumber(coordinator, client, entry, "Setpoint Heating Out Temp", "HeWatOutTemSet", "pdc_setpoint_heating_out_temp", 20, 50),
-        GreePDCNumber(coordinator, client, entry, "Setpoint Cooling Out Temp", "CoWatOutTemSet", "pdc_setpoint_cooling_out_temp", 7, 25),
-        GreePDCNumber(coordinator, client, entry, "Setpoint Heating Room Temp", "HeHomTemSet", "pdc_setpoint_heating_room_temp", 16, 30),
-        GreePDCNumber(coordinator, client, entry, "Setpoint Cooling Room Temp", "CoHomTemSet", "pdc_setpoint_cooling_room_temp", 16, 30),
+        GreePDCNumber(coordinator, client, entry, "Setpoint DHW", "WatBoxTemSet", "setpoint_dhw", 30, 60),
+        GreePDCNumber(coordinator, client, entry, "Setpoint Heating Out Temp", "HeWatOutTemSet", "setpoint_heating_out_temp", 20, 50),
+        GreePDCNumber(coordinator, client, entry, "Setpoint Cooling Out Temp", "CoWatOutTemSet", "setpoint_cooling_out_temp", 7, 25),
+        GreePDCNumber(coordinator, client, entry, "Setpoint Heating Room Temp", "HeHomTemSet", "setpoint_heating_room_temp", 16, 30),
+        GreePDCNumber(coordinator, client, entry, "Setpoint Cooling Room Temp", "CoHomTemSet", "setpoint_cooling_room_temp", 16, 30),
     ]
     
     async_add_entities(entities)

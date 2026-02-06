@@ -58,23 +58,23 @@ async def async_setup_entry(hass, entry, async_add_entities):
     
     entities = [
         # Main Temperatures
-        GreePDCSensor(coordinator, entry, "In Water Temp", "temp_ritorno", "pdc_in_water_temp",
+        GreePDCSensor(coordinator, entry, "In Water Temp", "temp_ritorno", "in_water_temp",
                       SensorDeviceClass.TEMPERATURE, UnitOfTemperature.CELSIUS, SensorStateClass.MEASUREMENT,
                       lambda d: parse_temp(d.get("AllInWatTemHi"), d.get("AllInWatTemLo"))),
-        GreePDCSensor(coordinator, entry, "Out Water Temp", "temp_mandata", "pdc_out_water_temp",
+        GreePDCSensor(coordinator, entry, "Out Water Temp", "temp_mandata", "out_water_temp",
                       SensorDeviceClass.TEMPERATURE, UnitOfTemperature.CELSIUS, SensorStateClass.MEASUREMENT,
                       lambda d: parse_temp(d.get("AllOutWatTemHi"), d.get("AllOutWatTemLo"))),
-        GreePDCSensor(coordinator, entry, "Temp DHW", "temp_acs", "pdc_temp_dhw",
+        GreePDCSensor(coordinator, entry, "Temp DHW", "temp_acs", "temp_dhw",
                       SensorDeviceClass.TEMPERATURE, UnitOfTemperature.CELSIUS, SensorStateClass.MEASUREMENT,
                       lambda d: parse_temp(d.get("WatBoxTemHi"), d.get("WatBoxTemLo"))),
-        GreePDCSensor(coordinator, entry, "Room Temp", "temp_ambiente", "pdc_room_temp",
+        GreePDCSensor(coordinator, entry, "Room Temp", "temp_ambiente", "room_temp",
                       SensorDeviceClass.TEMPERATURE, UnitOfTemperature.CELSIUS, SensorStateClass.MEASUREMENT,
                       lambda d: parse_temp(d.get("RmoHomTemHi"), d.get("RmoHomTemLo"))),
         
         # Mode
-        GreePDCSensor(coordinator, entry, "Mode", "Mod", "pdc_mode",
+        GreePDCSensor(coordinator, entry, "Mode", "Mod", "mode",
                       transform=lambda d: MODE_ID_TO_KEY.get(d.get("Mod")),
-                      translation_key="pdc_operation_mode"),
+                      translation_key="operation_mode"),
     ]
     
     async_add_entities(entities)

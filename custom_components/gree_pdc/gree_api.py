@@ -7,7 +7,7 @@ from cryptography.hazmat.backends import default_backend
 
 _LOGGER = logging.getLogger(__name__)
 
-GENERIC_KEY = "a3K8Bx%2r8Y7#xDh"
+from .const import GENERIC_KEY
 
 class GreePDCClient:
     @staticmethod

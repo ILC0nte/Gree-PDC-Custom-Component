@@ -1,7 +1,7 @@
 {
     "domain": "gree_pdc",
     "name": "Gree PDC",
-    "documentation": "https://github.com/cbernoni",
+    "documentation": "https://github.com/ILC0nte/Gree-PDC-Custom-Component",
     "requirements": [
         "cryptography"
     ],
