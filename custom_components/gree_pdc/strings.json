@@ -88,6 +88,15 @@
             },
             "dhw_state": {
                 "name": "DHW State"
+            },
+            "dhw_boiler_equipped": {
+                "name": "DHW Boiler equipped"
+            },
+            "antifreeze_function": {
+                "name": "Antifreeze Function"
+            },
+            "defrost_cycle": {
+                "name": "Defrost Cycle"
             }
         },
         "switch": {

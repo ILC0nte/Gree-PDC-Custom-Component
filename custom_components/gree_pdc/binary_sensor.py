@@ -8,7 +8,7 @@ from .const import DOMAIN, CONF_ID, CONF_NAME
 _LOGGER = logging.getLogger(__name__)
 
 class GreePDCBinarySensor(CoordinatorEntity, BinarySensorEntity):
-    def __init__(self, coordinator, entry, name, key, unique_id_suffix, device_class=None, transform=None):
+    def __init__(self, coordinator, entry, name, key, unique_id_suffix, device_class=None, transform=None, translation_key=None):
         super().__init__(coordinator)
         self._entry_id = entry.entry_id
         device_name = entry.data.get(CONF_NAME, "Gree PDC")
@@ -17,6 +17,7 @@ class GreePDCBinarySensor(CoordinatorEntity, BinarySensorEntity):
         self._attr_unique_id = f"{entry.entry_id}_{unique_id_suffix}"
         self._attr_device_class = device_class
         self._transform = transform
+        self._attr_translation_key = translation_key
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
             name=device_name,
@@ -45,6 +46,9 @@ async def async_setup_entry(hass, entry, async_add_entities):
         GreePDCBinarySensor(coordinator, entry, "Quiet Mode", "Quiet", "quiet_mode"),
         GreePDCBinarySensor(coordinator, entry, "Boiler Heat Resistance", "WatBoxElcHeRunSta", "boiler_heat_resistance"),
         GreePDCBinarySensor(coordinator, entry, "Rapid DHW", "FastHtWter", "rapid_dhw"),
+        GreePDCBinarySensor(coordinator, entry, "DHW Boiler equipped", "WatBoxExt", "dhw_boiler_equipped", translation_key="dhw_boiler_equipped"),
+        GreePDCBinarySensor(coordinator, entry, "Antifreeze Function", "SyAnFroRunSta", "antifreeze_function", translation_key="antifreeze_function"),
+        GreePDCBinarySensor(coordinator, entry, "Defrost Cycle", "AnFrzzRunSta", "defrost_cycle", translation_key="defrost_cycle"),
         
         # Function status based on Mod
         GreePDCBinarySensor(coordinator, entry, "Heating State", "Mod", "heating_state", 

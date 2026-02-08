@@ -1,0 +1,72 @@
+Pow					# Power Status (booleano) [Done]
+-------------------------------------------------------------------------------------
+Mod					# Modalità Operativa [Done]
+-------------------------------------------------------------------------------------
+AllInWatTemHi		# Temperatura Ritorno decadi (eliminare prima cifra) [Done]
+AllInWatTemLo		# Temperatura Ritorno decimali [Done]
+AllOutWatTemHi		# Temperatura Mandata decadi (eliminare prima cifra) [Done]
+AllOutWatTemLo  	# Temperatura Mandata decimali [Done]
+WatBoxTemHi			# Temperatura Boiler decadi (eliminare prima cifra) [Done]
+WatBoxTemLo     	# Temperatura Boiler decimali [Done]
+-------------------------------------------------------------------------------------
+WatBoxElcHeRunSta	# Resistenza Elettrica Ausiliaria Boiler ACS (booleano) [Done]
+-------------------------------------------------------------------------------------
+RmoHomTemHi			# Temperatura Sonda ambiente decadi (eliminare prima cifra) [Done]
+RmoHomTemLo     	# Temperatura Sonda ambiente decimali [Done]
+-------------------------------------------------------------------------------------
+CoWatOutTemSet		# Set Point Mandata Raffrescamento [Done]
+HeWatOutTemSet		# Set Point Mandata Riscaldamento [Done]
+WatBoxTemSet		# Set Point ACS [Done]
+CoHomTemSet         # Set Point Raffrescamento Modalità Termostato [Done]
+HeHomTemSet         # Set Point Riscaldamento Modalità Termostato [Done]
+-------------------------------------------------------------------------------------
+RomHomTemExt		# Temperatura di controllo Mandata/ambiente (0/1)
+-------------------------------------------------------------------------------------
+CoHomTemSet			# Set point Ambiente Raffreddamento [Done]
+HeHomTemSet			# Set point Ambiente Riscaldamento [Done]
+-------------------------------------------------------------------------------------
+HeHtWter			# Priorità Risc/ACS in Riscaldamento (0/1)
+ColHtWter			# Priorità Raff/ACS in Raffreddamento (0/1)
+-------------------------------------------------------------------------------------
+WatBoxExt			# Presenza Boiler ACS [Done]
+-------------------------------------------------------------------------------------
+TemUn				# Unità di temperatura (0 Celsius/1 Fareneit)
+-------------------------------------------------------------------------------------
+FastHtWter			# Modalità ACS Rapida (booleano) [Done]
+Quiet				# Modalità Silenziosa (booleano) [Done]
+-------------------------------------------------------------------------------------
+AnFrzzRunSta        # Anti Freeze Running Status (Sbrinamento?) [Done]
+SyAnFroRunSta       # Funzione Antigelo Running Status [Done]
+-------------------------------------------------------------------------------------
+Emegcy              # Modalità Emergenza
+-------------------------------------------------------------------------------------
+LefHom              # Away From Home
+-------------------------------------------------------------------------------------
+SwDisFct            # Ciclo Antilegionella
+
+
+
+
+-------------------------------------------------------------------------------------
+#### Indefinite #####
+ElcHe1RunSta        # Stato Resistenza Ausiliaria 1
+ElcHe2RunSta        # Stato Resistenza Ausiliaria 2
+TemRec
+TemRecB
+
+SvSt
+VersatiSeries
+
+
+FocModSwh
+HanFroSwh
+WatSyExhSwh
+BordTest
+ColColetSwh
+EndTemCotSwh
+ModelType
+
+
+-------------------------------------------------------------------------------------
+HepOutWatTemHi	?	Massima temperatura mandata impostabile Unità
+HepOutWatTemLo	?   Massima temperatura mandata impostabile Decimali

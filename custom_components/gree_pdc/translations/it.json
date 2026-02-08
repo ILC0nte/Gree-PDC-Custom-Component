@@ -88,6 +88,15 @@
             },
             "dhw_state": {
                 "name": "Stato ACS"
+            },
+            "dhw_boiler_equipped": {
+                "name": "Serbatoio ACS installato"
+            },
+            "antifreeze_function": {
+                "name": "Funzione Antigelo"
+            },
+            "defrost_cycle": {
+                "name": "Ciclo di Sbrinamento"
             }
         },
         "switch": {

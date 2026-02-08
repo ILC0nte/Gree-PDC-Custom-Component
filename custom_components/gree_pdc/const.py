@@ -18,5 +18,6 @@ STATUS_COLS = [
     "Pow", "Mod", "WatBoxTemSet", "HeWatOutTemSet", "CoWatOutTemSet",
     "HeHomTemSet", "CoHomTemSet", "Quiet", "AllInWatTemHi", "AllInWatTemLo",
     "AllOutWatTemHi", "AllOutWatTemLo", "WatBoxTemHi", "WatBoxTemLo",
-    "WatBoxElcHeRunSta", "FastHtWter", "RmoHomTemHi", "RmoHomTemLo"
+    "WatBoxElcHeRunSta", "FastHtWter", "RmoHomTemHi", "RmoHomTemLo", "WatBoxExt",
+    "SyAnFroRunSta", "AnFrzzRunSta"
 ]
