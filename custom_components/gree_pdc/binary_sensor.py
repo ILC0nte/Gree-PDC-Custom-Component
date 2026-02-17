@@ -1,31 +1,39 @@
 import logging
-from homeassistant.components.binary_sensor import BinarySensorEntity, BinarySensorDeviceClass
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from dataclasses import dataclass
+from typing import Callable, Any
 
+from homeassistant.components.binary_sensor import (
+    BinarySensorEntity, 
+    BinarySensorDeviceClass,
+    BinarySensorEntityDescription,
+)
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers.entity import DeviceInfo
+
 from .const import DOMAIN, CONF_ID, CONF_NAME
 
 _LOGGER = logging.getLogger(__name__)
 
+@dataclass
+class GreePDCBinarySensorEntityDescription(BinarySensorEntityDescription):
+    """Custom description for Gree PDC binary sensors."""
+    transform: Callable[[dict], Any] | None = None
+
 class GreePDCBinarySensor(CoordinatorEntity, BinarySensorEntity):
-    def __init__(self, coordinator, entry, name, key, unique_id_suffix, device_class=None, transform=None, translation_key=None):
+    _attr_has_entity_name = True
+
+    def __init__(self, coordinator, entry, description: GreePDCBinarySensorEntityDescription):
         super().__init__(coordinator)
+        self.entity_description = description
         self._entry_id = entry.entry_id
         device_name = entry.data.get(CONF_NAME, "Gree PDC")
-        self._attr_name = f"{device_name} {name}"
-        self._key = key
-        self._attr_unique_id = f"{entry.entry_id}_{unique_id_suffix}"
-        self._attr_device_class = device_class
-        self._transform = transform
-        self._attr_translation_key = translation_key
+        self._attr_unique_id = f"{entry.entry_id}_{description.key}"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
             name=device_name,
             manufacturer="Gree",
             model="Versati",
         )
-        # Set the entity_id to match the requested schema
-        self.entity_id = f"binary_sensor.{device_name.lower().replace(' ', '_')}_{unique_id_suffix}"
 
     @property
     def is_on(self):
@@ -33,30 +41,60 @@ class GreePDCBinarySensor(CoordinatorEntity, BinarySensorEntity):
         if data is None:
             return None
         
-        if self._transform:
-            return self._transform(data)
+        if self.entity_description.transform:
+            return self.entity_description.transform(data)
             
-        return data.get(self._key) == 1
+        return data.get(self.entity_description.key) == 1
 
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
     
-    entities = [
-        GreePDCBinarySensor(coordinator, entry, "Power", "Pow", "power", BinarySensorDeviceClass.POWER),
-        GreePDCBinarySensor(coordinator, entry, "Quiet Mode", "Quiet", "quiet_mode"),
-        GreePDCBinarySensor(coordinator, entry, "Boiler Heat Resistance", "WatBoxElcHeRunSta", "boiler_heat_resistance"),
-        GreePDCBinarySensor(coordinator, entry, "Rapid DHW", "FastHtWter", "rapid_dhw"),
-        GreePDCBinarySensor(coordinator, entry, "DHW Boiler equipped", "WatBoxExt", "dhw_boiler_equipped", translation_key="dhw_boiler_equipped"),
-        GreePDCBinarySensor(coordinator, entry, "Antifreeze Function", "SyAnFroRunSta", "antifreeze_function", translation_key="antifreeze_function"),
-        GreePDCBinarySensor(coordinator, entry, "Defrost Cycle", "AnFrzzRunSta", "defrost_cycle", translation_key="defrost_cycle"),
-        
-        # Function status based on Mod
-        GreePDCBinarySensor(coordinator, entry, "Heating State", "Mod", "heating_state", 
-                            transform=lambda d: d.get("Mod") in (1, 4)),
-        GreePDCBinarySensor(coordinator, entry, "Cooling State", "Mod", "cooling_state", 
-                            transform=lambda d: d.get("Mod") in (3, 5)),
-        GreePDCBinarySensor(coordinator, entry, "DHW State", "Mod", "dhw_state", 
-                            transform=lambda d: d.get("Mod") in (2, 3, 4)),
+    descriptions = [
+        GreePDCBinarySensorEntityDescription(
+            key="power",
+            translation_key="power",
+            device_class=BinarySensorDeviceClass.POWER,
+        ),
+        GreePDCBinarySensorEntityDescription(
+            key="quiet_mode",
+            translation_key="quiet_mode",
+        ),
+        GreePDCBinarySensorEntityDescription(
+            key="boiler_heat_resistance",
+            translation_key="boiler_heat_resistance",
+        ),
+        GreePDCBinarySensorEntityDescription(
+            key="rapid_dhw",
+            translation_key="rapid_dhw",
+        ),
+        GreePDCBinarySensorEntityDescription(
+            key="dhw_boiler_equipped",
+            translation_key="dhw_boiler_equipped",
+        ),
+        GreePDCBinarySensorEntityDescription(
+            key="antifreeze_function",
+            translation_key="antifreeze_function",
+        ),
+        GreePDCBinarySensorEntityDescription(
+            key="defrost_cycle",
+            translation_key="defrost_cycle",
+        ),
+        GreePDCBinarySensorEntityDescription(
+            key="heating_state",
+            translation_key="heating_state",
+            transform=lambda d: d.get("Mod") in (1, 4),
+        ),
+        GreePDCBinarySensorEntityDescription(
+            key="cooling_state",
+            translation_key="cooling_state",
+            transform=lambda d: d.get("Mod") in (3, 5),
+        ),
+        GreePDCBinarySensorEntityDescription(
+            key="dhw_state",
+            translation_key="dhw_state",
+            transform=lambda d: d.get("Mod") in (2, 3, 4),
+        ),
     ]
     
-    async_add_entities(entities)
+    async_add_entities([GreePDCBinarySensor(coordinator, entry, desc) for desc in descriptions])
+

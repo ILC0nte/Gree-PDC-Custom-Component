@@ -1,58 +1,81 @@
 import logging
-from homeassistant.components.number import NumberEntity
+from homeassistant.components.number import NumberEntity, NumberEntityDescription
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-
 from homeassistant.helpers.entity import DeviceInfo
+
 from .const import DOMAIN, CONF_ID, CONF_NAME
 
 _LOGGER = logging.getLogger(__name__)
 
 class GreePDCNumber(CoordinatorEntity, NumberEntity):
-    def __init__(self, coordinator, client, entry, name, key, unique_id_suffix, min_val, max_val, step=1):
+    _attr_has_entity_name = True
+
+    def __init__(self, coordinator, client, entry, description: NumberEntityDescription):
         super().__init__(coordinator)
+        self.entity_description = description
         self._client = client
         self._entry_id = entry.entry_id
         device_name = entry.data.get(CONF_NAME, "Gree PDC")
-        self._attr_name = f"{device_name} {name}"
-        self._key = key
-        self._attr_unique_id = f"{entry.entry_id}_{unique_id_suffix}"
-        self._attr_native_min_value = min_val
-        self._attr_native_max_value = max_val
-        self._attr_native_step = step
+        self._attr_unique_id = f"{entry.entry_id}_{description.key}"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
             name=device_name,
             manufacturer="Gree",
             model="Versati",
         )
-        # Set the entity_id to match the requested schema
-        self.entity_id = f"number.{device_name.lower().replace(' ', '_')}_{unique_id_suffix}"
 
     @property
     def native_value(self):
         data = self.coordinator.data
         if data is None:
             return None
-        return data.get(self._key)
+        return data.get(self.entity_description.key)
 
     async def async_set_native_value(self, value):
         success = await self.hass.async_add_executor_job(
-            self._client.set_values, {self._key: int(value)}
+            self._client.set_values, {self.entity_description.key: int(value)}
         )
         if success:
-            self.coordinator.data[self._key] = int(value)
+            if self.coordinator.data is not None:
+                self.coordinator.data[self.entity_description.key] = int(value)
             self.async_write_ha_state()
 
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
     client = hass.data[DOMAIN][entry.entry_id]["client"]
     
-    entities = [
-        GreePDCNumber(coordinator, client, entry, "Setpoint DHW", "WatBoxTemSet", "setpoint_dhw", 30, 60),
-        GreePDCNumber(coordinator, client, entry, "Setpoint Heating Out Temp", "HeWatOutTemSet", "setpoint_heating_out_temp", 20, 50),
-        GreePDCNumber(coordinator, client, entry, "Setpoint Cooling Out Temp", "CoWatOutTemSet", "setpoint_cooling_out_temp", 7, 25),
-        GreePDCNumber(coordinator, client, entry, "Setpoint Heating Room Temp", "HeHomTemSet", "setpoint_heating_room_temp", 16, 30),
-        GreePDCNumber(coordinator, client, entry, "Setpoint Cooling Room Temp", "CoHomTemSet", "setpoint_cooling_room_temp", 16, 30),
+    descriptions = [
+        NumberEntityDescription(
+            key="WatBoxTemSet",
+            translation_key="setpoint_dhw",
+            native_min_value=30,
+            native_max_value=60,
+        ),
+        NumberEntityDescription(
+            key="HeWatOutTemSet",
+            translation_key="setpoint_heating_out_temp",
+            native_min_value=20,
+            native_max_value=50,
+        ),
+        NumberEntityDescription(
+            key="CoWatOutTemSet",
+            translation_key="setpoint_cooling_out_temp",
+            native_min_value=7,
+            native_max_value=25,
+        ),
+        NumberEntityDescription(
+            key="HeHomTemSet",
+            translation_key="setpoint_heating_room_temp",
+            native_min_value=16,
+            native_max_value=30,
+        ),
+        NumberEntityDescription(
+            key="CoHomTemSet",
+            translation_key="setpoint_cooling_room_temp",
+            native_min_value=16,
+            native_max_value=30,
+        ),
     ]
     
-    async_add_entities(entities)
+    async_add_entities([GreePDCNumber(coordinator, client, entry, desc) for desc in descriptions])
+
