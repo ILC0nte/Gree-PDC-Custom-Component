@@ -104,5 +104,6 @@ async def async_setup_entry(hass, entry, async_add_entities):
         ),
     ]
     
+    _LOGGER.debug("Adding %d sensors", len(descriptions))
     async_add_entities([GreePDCSensor(coordinator, entry, desc) for desc in descriptions])
 

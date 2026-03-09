@@ -32,22 +32,30 @@ class GreePDCSwitch(CoordinatorEntity, SwitchEntity):
         return data.get(self.entity_description.key) == 1
 
     async def async_turn_on(self, **kwargs):
+        _LOGGER.debug("Turning on %s", self.entity_description.key)
         success = await self.hass.async_add_executor_job(
             self._client.set_values, {self.entity_description.key: 1}
         )
         if success:
+            _LOGGER.debug("Successfully turned on %s", self.entity_description.key)
             if self.coordinator.data is not None:
                 self.coordinator.data[self.entity_description.key] = 1
             self.async_write_ha_state()
+        else:
+            _LOGGER.error("Failed to turn on %s", self.entity_description.key)
 
     async def async_turn_off(self, **kwargs):
+        _LOGGER.debug("Turning off %s", self.entity_description.key)
         success = await self.hass.async_add_executor_job(
             self._client.set_values, {self.entity_description.key: 0}
         )
         if success:
+            _LOGGER.debug("Successfully turned off %s", self.entity_description.key)
             if self.coordinator.data is not None:
                 self.coordinator.data[self.entity_description.key] = 0
             self.async_write_ha_state()
+        else:
+            _LOGGER.error("Failed to turn off %s", self.entity_description.key)
 
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
@@ -66,5 +74,6 @@ async def async_setup_entry(hass, entry, async_add_entities):
         ),
     ]
     
+    _LOGGER.debug("Adding %d switches", len(descriptions))
     async_add_entities([GreePDCSwitch(coordinator, client, entry, desc) for desc in descriptions])
 

@@ -2,6 +2,8 @@ import base64
 import json
 import socket
 import logging
+import threading
+import time
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
@@ -91,6 +93,7 @@ class GreePDCClient:
         self.device_id = device_id
         self.device_key = device_key
         self.port = 7000
+        self._lock = threading.Lock()
 
     def _add_pkcs7_padding(self, data):
         length = 16 - (len(data) % 16)
@@ -115,26 +118,28 @@ class GreePDCClient:
         return pack_unpadded.decode('utf-8')
 
     def _send_data(self, data):
-        s = socket.socket(type=socket.SOCK_DGRAM, proto=socket.IPPROTO_UDP)
-        s.settimeout(5)
-        try:
-            s.sendto(data.encode('utf-8'), (self.host, self.port))
-            response, _ = s.recvfrom(2048)
-            return response.decode('utf-8')
-        except socket.timeout:
-            _LOGGER.error("Timeout sending data to %s", self.host)
-            raise
-        except Exception as e:
-            _LOGGER.error("Error sending data to %s: %s", self.host, e)
-            raise
-        finally:
-            s.close()
+        with self._lock:
+            s = socket.socket(type=socket.SOCK_DGRAM, proto=socket.IPPROTO_UDP)
+            s.settimeout(3)
+            try:
+                s.sendto(data.encode('utf-8'), (self.host, self.port))
+                response, _ = s.recvfrom(2048)
+                return response.decode('utf-8')
+            except socket.timeout:
+                _LOGGER.error("Timeout (3s) sending data to %s", self.host)
+                raise
+            except Exception as e:
+                _LOGGER.error("Error sending data to %s: %s", self.host, e)
+                raise
+            finally:
+                s.close()
 
     def get_values(self, cols):
         cols_str = ','.join(f'"{c}"' for c in cols)
         pack = f'{{"cols":[{cols_str}],"mac":"{self.device_id}","t":"status"}}'
         pack_encrypted = self._encrypt(pack, self.device_key)
         
+        _LOGGER.debug("Sending status request to %s for %d columns", self.host, len(cols))
         request = {
             "cid": "app",
             "i": 0,
@@ -162,7 +167,7 @@ class GreePDCClient:
         pack = f'{{"opt":[{opts_str}],"p":[{ps_str}],"t":"cmd"}}'
         pack_encrypted = self._encrypt(pack, self.device_key)
         
-        request = {
+        request_obj = {
             "cid": "app",
             "i": 0,
             "pack": pack_encrypted,
@@ -170,12 +175,34 @@ class GreePDCClient:
             "tcid": self.device_id,
             "uid": 0
         }
+        request_str = json.dumps(request_obj)
+
+        for attempt in range(6):  # Initial attempt + up to 5 retries
+            if attempt > 0:
+                _LOGGER.debug("Retrying command to %s (retry %d/5)", self.host, attempt)
+            else:
+                _LOGGER.debug("Sending command to %s: %s", self.host, values_dict)
+                
+            try:
+                response_str = self._send_data(request_str)
+                response = json.loads(response_str)
+                
+                if response.get("t") == "pack":
+                    pack_decrypted = self._decrypt(response["pack"], self.device_key)
+                    result = json.loads(pack_decrypted)
+                    success = result.get("r") == 200
+                    if success:
+                        _LOGGER.debug("Command successful on %s", self.host)
+                        return True
+                    else:
+                        _LOGGER.error("Command failed on %s (attempt %d): %s", self.host, attempt + 1, result)
+                else:
+                    _LOGGER.error("Unexpected response from %s (attempt %d): %s", self.host, attempt + 1, response)
+            except Exception as e:
+                _LOGGER.error("Error sending command to %s (attempt %d): %s", self.host, attempt + 1, e)
+            
+            if attempt < 5:
+                time.sleep(1)
         
-        response_str = self._send_data(json.dumps(request))
-        response = json.loads(response_str)
-        
-        if response.get("t") == "pack":
-            pack_decrypted = self._decrypt(response["pack"], self.device_key)
-            result = json.loads(pack_decrypted)
-            return result.get("r") == 200
+        _LOGGER.error("Command failed on %s after 5 retries", self.host)
         return False

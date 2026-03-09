@@ -1,3 +1,4 @@
+import logging
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
@@ -13,6 +14,8 @@ from .const import (
     MAX_SCAN_INTERVAL
 )
 from .gree_api import GreePDCClient
+
+_LOGGER = logging.getLogger(__name__)
 
 class GreePDCConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
@@ -30,14 +33,18 @@ class GreePDCConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 self._devices = await self.hass.async_add_executor_job(
                     GreePDCClient.scan, self._host
                 )
+                _LOGGER.debug("Discovered %d devices at %s", len(self._devices), self._host)
                 if not self._devices:
+                    _LOGGER.warning("No devices found at %s", self._host)
                     errors["base"] = "cannot_connect"
                 elif len(self._devices) == 1:
                     self._selected_device = self._devices[0]
+                    _LOGGER.info("Automatically selected device %s (%s)", self._selected_device['name'], self._selected_device['id'])
                     return await self.async_step_name()
                 else:
                     return await self.async_step_select()
-            except Exception:
+            except Exception as e:
+                _LOGGER.error("Error during scan at %s: %s", self._host, e)
                 errors["base"] = "cannot_connect"
 
         return self.async_show_form(
@@ -69,10 +76,12 @@ class GreePDCConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             scan_interval = user_input.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
             
             # Perform binding
+            _LOGGER.debug("Binding to device %s at %s", self._selected_device["id"], self._selected_device["host"])
             client = GreePDCClient(self._selected_device["host"], self._selected_device["id"], "")
             success = await self.hass.async_add_executor_job(client.bind)
             
             if success:
+                _LOGGER.info("Binding successful for device %s", self._selected_device["id"])
                 await self.async_set_unique_id(self._selected_device["id"])
                 self._abort_if_unique_id_configured()
                 
@@ -87,6 +96,7 @@ class GreePDCConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     }
                 )
             else:
+                _LOGGER.error("Binding failed for device %s", self._selected_device["id"])
                 errors["base"] = "cannot_connect"
 
         return self.async_show_form(

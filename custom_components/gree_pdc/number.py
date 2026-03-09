@@ -32,13 +32,17 @@ class GreePDCNumber(CoordinatorEntity, NumberEntity):
         return data.get(self.entity_description.key)
 
     async def async_set_native_value(self, value):
+        _LOGGER.debug("Setting %s to %s", self.entity_description.key, value)
         success = await self.hass.async_add_executor_job(
             self._client.set_values, {self.entity_description.key: int(value)}
         )
         if success:
+            _LOGGER.debug("Successfully set %s to %s", self.entity_description.key, value)
             if self.coordinator.data is not None:
                 self.coordinator.data[self.entity_description.key] = int(value)
             self.async_write_ha_state()
+        else:
+            _LOGGER.error("Failed to set %s to %s", self.entity_description.key, value)
 
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
@@ -77,5 +81,6 @@ async def async_setup_entry(hass, entry, async_add_entities):
         ),
     ]
     
+    _LOGGER.debug("Adding %d number entities", len(descriptions))
     async_add_entities([GreePDCNumber(coordinator, client, entry, desc) for desc in descriptions])
 

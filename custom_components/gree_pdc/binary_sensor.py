@@ -103,5 +103,6 @@ async def async_setup_entry(hass, entry, async_add_entities):
         ),
     ]
     
+    _LOGGER.debug("Adding %d binary sensors", len(descriptions))
     async_add_entities([GreePDCBinarySensor(coordinator, entry, desc) for desc in descriptions])
 

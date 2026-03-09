@@ -44,19 +44,24 @@ class GreePDCModeSelect(CoordinatorEntity, SelectEntity):
         return MODE_ID_TO_KEY.get(mod_val)
 
     async def async_select_option(self, option: str):
+        _LOGGER.debug("Selecting mode %s", option)
         mod_val = MODE_KEY_TO_ID.get(option)
         if mod_val is not None:
             success = await self.hass.async_add_executor_job(
                 self._client.set_values, {"Mod": mod_val}
             )
             if success:
+                _LOGGER.debug("Successfully set mode to %s", option)
                 if self.coordinator.data is not None:
                     self.coordinator.data["Mod"] = mod_val
                 self.async_write_ha_state()
+            else:
+                _LOGGER.error("Failed to set mode to %s", option)
 
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
     client = hass.data[DOMAIN][entry.entry_id]["client"]
     
+    _LOGGER.debug("Adding mode select entity")
     async_add_entities([GreePDCModeSelect(coordinator, client, entry)])
 
