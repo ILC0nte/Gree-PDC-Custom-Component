@@ -54,30 +54,37 @@ async def async_setup_entry(hass, entry, async_add_entities):
             key="power",
             translation_key="power",
             device_class=BinarySensorDeviceClass.POWER,
+            transform=lambda d: d.get("Pow") == 1,
         ),
         GreePDCBinarySensorEntityDescription(
             key="quiet_mode",
             translation_key="quiet_mode",
+            transform=lambda d: d.get("Quiet") == 1,
         ),
         GreePDCBinarySensorEntityDescription(
             key="boiler_heat_resistance",
             translation_key="boiler_heat_resistance",
+            transform=lambda d: d.get("WatBoxElcHeRunSta") == 1,
         ),
         GreePDCBinarySensorEntityDescription(
             key="rapid_dhw",
             translation_key="rapid_dhw",
+            transform=lambda d: d.get("FastHtWter") == 1,
         ),
         GreePDCBinarySensorEntityDescription(
             key="dhw_boiler_equipped",
             translation_key="dhw_boiler_equipped",
+            transform=lambda d: d.get("WatBoxExt") == 1,
         ),
         GreePDCBinarySensorEntityDescription(
             key="antifreeze_function",
             translation_key="antifreeze_function",
+            transform=lambda d: d.get("SyAnFroRunSta") == 1,
         ),
         GreePDCBinarySensorEntityDescription(
             key="defrost_cycle",
             translation_key="defrost_cycle",
+            transform=lambda d: d.get("AnFrzzRunSta") == 1,
         ),
         GreePDCBinarySensorEntityDescription(
             key="heating_state",
